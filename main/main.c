@@ -14,11 +14,13 @@ void task_1()
     volatile uint32_t ul;
     while(1)
     {
+        TickType_t xLastWakeTime;
+        xLastWakeTime = xTaskGetTickCount();
         printf("%s\n", task_name);
         for(ul = 0; ul < mainDELAY_LOOP_COUNT; ul++)
         {
         }
-        vTaskDelay(pdMS_TO_TICKS(100));
+        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000));
     }
 }
 
@@ -28,11 +30,13 @@ void task_2()
     volatile uint32_t ul;
     while(1)
     {
+        TickType_t xLastWakeTime;
+        xLastWakeTime = xTaskGetTickCount();
         printf("%s\n", task_name);
         for(ul = 0; ul < mainDELAY_LOOP_COUNT; ul++)
         {
         }
-        vTaskDelay(pdMS_TO_TICKS(100));
+        xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000));
     }
 }
 
