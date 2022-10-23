@@ -6,6 +6,7 @@
 #include "freertos/semphr.h"
 #include "freertos/queue.h"
 #include "esp_err.h"
+#include "sensors.h"
 
 #define mainDELAY_LOOP_COUNT 100
 #define SPIN_TASK_PRIO      2
@@ -18,9 +19,6 @@ void task_1()
         TickType_t xLastWakeTime;
         xLastWakeTime = xTaskGetTickCount();
         printf("%s\n", task_name);
-        for(ul = 0; ul < mainDELAY_LOOP_COUNT; ul++)
-        {
-        }
         vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000));
     }
 }
@@ -34,9 +32,6 @@ void task_2()
         TickType_t xLastWakeTime;
         xLastWakeTime = xTaskGetTickCount();
         printf("%s\n", task_name);
-        for(ul = 0; ul < mainDELAY_LOOP_COUNT; ul++)
-        {
-        }
         xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000));
     }
 }
@@ -84,9 +79,11 @@ void task_recv_queue()
 
 void app_main(void)
 {
+    sensors_init();
+
     xQueue = xQueueCreate(10, sizeof(uint32_t));
     //xTaskCreatePinnedToCore(task_1, "TASK1", 4096, NULL, SPIN_TASK_PRIO, NULL, tskNO_AFFINITY);
     //xTaskCreatePinnedToCore(task_2, "TASK2", 4096, NULL, SPIN_TASK_PRIO, NULL, tskNO_AFFINITY);
-    xTaskCreatePinnedToCore(task_recv_queue, "send_task", 4096, NULL, SPIN_TASK_PRIO, NULL, tskNO_AFFINITY);
-    xTaskCreatePinnedToCore(task_send_queue, "recv_task", 4096, NULL, SPIN_TASK_PRIO, NULL, tskNO_AFFINITY);
+    //xTaskCreatePinnedToCore(task_recv_queue, "send_task", 4096, NULL, SPIN_TASK_PRIO, NULL, tskNO_AFFINITY);
+    //xTaskCreatePinnedToCore(task_send_queue, "recv_task", 4096, NULL, SPIN_TASK_PRIO, NULL, tskNO_AFFINITY);
 }
